@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Book Appointment</title>
+
+<style>
+body { font-family:Arial; background:#f4f6f9; }
+
+.box {
+    width:320px;
+    margin:100px auto;
+    background:white;
+    padding:20px;
+}
+
+input, select, button {
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Book Appointment</h2>
+
+<form method="POST">
+    <input name="name" placeholder="Name" required>
+    <input name="condition" placeholder="Condition" required>
+
+    <select name="type" required>
+        <option value="Normal">Normal</option>
+        <option value="Emergency">Emergency 🚨</option>
+    </select>
+
+    <button>Book Now</button>
+</form>
+
+</div>
+
+</body>
+</html>

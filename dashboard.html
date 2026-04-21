@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hospital Dashboard</title>
+
+<style>
+body { font-family: Arial; background:#f4f6f9; display:flex; margin:0; }
+
+.sidebar {
+    width:220px;
+    background:#111827;
+    color:white;
+    height:100vh;
+    padding:20px;
+}
+
+.sidebar a {
+    color:white;
+    display:block;
+    margin:10px 0;
+    text-decoration:none;
+}
+
+.main {
+    flex:1;
+    padding:20px;
+}
+
+form input, form select, form button {
+    padding:10px;
+    margin:5px;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+td, th {
+    border:1px solid #ccc;
+    padding:10px;
+}
+
+.emergency {
+    background:#ffcccc;
+}
+</style>
+
+<script>
+async function loadPatients(){
+    const res = await fetch("/api/patients");
+    const data = await res.json();
+
+    let table = document.getElementById("table");
+
+    table.innerHTML = `
+    <tr>
+        <th>ID</th><th>Name</th><th>Condition</th>
+        <th>Type</th><th>Status</th>
+        <th>Position</th><th>Waiting</th>
+    </tr>`;
+
+    data.patients.forEach(p=>{
+        let row = document.createElement("tr");
+
+        if(p.type === "Emergency"){
+            row.classList.add("emergency");
+        }
+
+        row.innerHTML = `
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>${p.condition}</td>
+            <td>${p.type}</td>
+            <td>${p.status}</td>
+            <td>${p.position}</td>
+            <td>${p.waiting} mins</td>
+        `;
+
+        table.appendChild(row);
+    });
+}
+
+setInterval(loadPatients, 3000);
+window.onload = loadPatients;
+</script>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Clinic</h2>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/book">Booking</a>
+    <a href="/next_patient">Call Next Patient</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="main">
+
+<h1>Dashboard</h1>
+<h3>{{ doctor }}</h3>
+
+<form method="POST">
+    <input name="name" placeholder="Patient Name" required>
+    <input name="condition" placeholder="Condition" required>
+
+    <!-- EMERGENCY DROPDOWN -->
+    <select name="type" required>
+        <option value="Normal">Normal</option>
+        <option value="Emergency">Emergency 🚨</option>
+    </select>
+
+    <button>Add Patient</button>
+</form>
+
+<button onclick="location.href='/next_patient'">
+    Call Next Patient
+</button>
+
+<table id="table"></table>
+
+</div>
+
+</body>
+</html>
